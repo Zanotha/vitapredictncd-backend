@@ -54,6 +54,21 @@ def home():
     return "Flask API is running!"
 
 # -------------------------------
+# Test Database Connection Endpoint
+# -------------------------------
+@app.route('/test_db')
+def test_db():
+    try:
+        conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM users LIMIT 1;")
+        row = cur.fetchone()
+        conn.close()
+        return f"DB connected! Row: {row}"
+    except Exception as e:
+        return f"DB error: {str(e)}"
+
+# -------------------------------
 # Login Endpoint
 # -------------------------------
 @app.route("/login", methods=["POST"])
